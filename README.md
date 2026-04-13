@@ -1,5 +1,5 @@
 # SDN-Traffic-Monitoring-and-Statistics-Collector
-
+This project implements an SDN-based traffic monitoring system using Mininet and Ryu controller. The controller collects flow-level statistics such as packet count and byte count, performs periodic monitoring, and displays traffic behavior.
 
 SDN-Traffic-Monitoring/
 │
