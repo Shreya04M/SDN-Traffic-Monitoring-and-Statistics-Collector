@@ -11,3 +11,4 @@ SDN-Traffic-Monitoring/
 │   ├── flow_table.png
 │   └── controller_logs.png
 └── requirements.txt (optional)
+Packets from hosts are sent to the controller. The controller installs flow rules and periodically collects statistics such as packet count and byte count.
