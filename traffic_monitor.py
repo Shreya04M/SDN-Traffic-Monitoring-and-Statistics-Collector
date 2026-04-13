@@ -3,21 +3,23 @@ from ryu.controller import ofp_event
 from ryu.controller.handler import CONFIG_DISPATCHER, MAIN_DISPATCHER, DEAD_DISPATCHER
 from ryu.controller.handler import set_ev_cls
 from ryu.ofproto import ofproto_v1_3
-from ryu.lib.packet import packet, ethernet
-from ryu.lib import hub
-
+from ryu.lib.packet import packet, ethernet   #extracts paclet address
+from ryu.lib import hub #bg thread monitor 
+#ryu applications handels flow events and stats , config setup and other operations 
 class TrafficMonitor(app_manager.RyuApp):
-    OFP_VERSIONS = [ofproto_v1_3.OFP_VERSION]
+    OFP_VERSIONS = [ofproto_v1_3.OFP_VERSION] # inform switch to use openflow version 
 
     def __init__(self, *args, **kwargs):
         super(TrafficMonitor, self).__init__(*args, **kwargs)
-        self.datapaths = {}
-        self.mac_to_port = {}
-        self.monitor_thread = hub.spawn(self.monitor)
+        self.datapaths = {} # store the switches that are connected to controller 
+        self.mac_to_port = {}  #stores port
+        self.monitor_thread = hub.spawn(self.monitor) #starts bg monitor loop and runs every few seconds 
 
     # Register switch
-    @set_ev_cls(ofp_event.EventOFPStateChange,
-                [MAIN_DISPATCHER, DEAD_DISPATCHER])
+    @set_ev_cls(ofp_event.EventOFPStateChange, [MAIN_DISPATCHER, DEAD_DISPATCHER]) 
+    #triggers when switches are called /connected
+
+    #handels initial setup 
     def state_change_handler(self, ev):
         datapath = ev.datapath
         if ev.state == MAIN_DISPATCHER:
@@ -39,11 +41,12 @@ class TrafficMonitor(app_manager.RyuApp):
     # Request flow stats
     def request_stats(self, datapath):
         ofproto = datapath.ofproto
+        # used to creat openflow rules 
         parser = datapath.ofproto_parser
 
         req = parser.OFPFlowStatsRequest(datapath)
         datapath.send_msg(req)
-
+#parsermatches packets 
     # Receive flow stats
     @set_ev_cls(ofp_event.EventOFPFlowStatsReply, MAIN_DISPATCHER)
     def flow_stats_reply_handler(self, ev):
