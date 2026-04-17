@@ -40,6 +40,21 @@ When a packet arrives at the switch, it sends a packet_in message to the control
 The controller processes the packet and installs appropriate flow rules in the switch.
 The controller periodically requests flow statistics from the switch.
 Flow statistics such as packet count and byte count are collected and displayed.
+Execution Steps
+# Start controller
+python3 -m ryu.cmd.manager traffic_monitor.py
+
+# Start Mininet
+sudo mn --topo single,3 --controller=remote
+
+# Test connectivity
+pingall
+
+# Latency test
+h1 ping -c 5 h2
+
+# Throughput test
+iperf h1 h2
 
 Expected Output :
         Successful communication between hosts
