@@ -40,7 +40,8 @@ The controller processes the packet and installs appropriate flow rules in the s
 The controller periodically requests flow statistics from the switch.
 Flow statistics such as packet count and byte count are collected and displayed.
 Execution Steps
-#To clear the junk
+
+**#To clear the junk**
  sudo mn -c
 
 # Start controller
